@@ -155,49 +155,27 @@ document.querySelectorAll('#contactForm input, #contactForm textarea').forEach(i
 });
 
 // Contact Form Submission Toast
-const contactForm = document.getElementById('contactForm');
-const toast = document.getElementById('toast');
-if (contactForm) {
-  contactForm.addEventListener('submit', function () {
-    setTimeout(() => {
-      toast.innerHTML = '✔️ Message sent successfully!';
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 2500);
-    }, 100);
-  });
-}
 
-// Back to Top Button
-const backToTopBtn = document.createElement('button');
-backToTopBtn.innerHTML = '⬆️';
-backToTopBtn.id = 'backToTop';
-backToTopBtn.style.cssText = `
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: var(--accent);
-  color: white;
-  border: none;
-  padding: 0.6rem 1rem;
-  border-radius: 50%;
-  cursor: pointer;
-  display: none;
-  font-size: 1.2rem;
-  z-index: 999;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  transition: opacity 0.4s ease;
-`;
-document.body.appendChild(backToTopBtn);
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 300) {
-    backToTopBtn.style.display = 'block';
-  } else {
-    backToTopBtn.style.display = 'none';
-  }
-});
-backToTopBtn.addEventListener('click', () => {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-});
+// Toast after redirect
+window.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('submitted') === 'true') {
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+  
+      // Optional: remove query param from URL
+      const url = new URL(window.location);
+      url.searchParams.delete('submitted');
+      window.history.replaceState({}, document.title, url.pathname + url.hash);
+    }
+  });
+  
+
+
+
 
 // Dynamic Footer Year
 document.getElementById('year').textContent = new Date().getFullYear();
